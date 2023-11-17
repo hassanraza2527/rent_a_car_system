@@ -1,0 +1,88 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Car {
+    private String make;
+    private String model;
+    private boolean available;
+
+    public Car(String make, String model) {
+        this.make = make;
+        this.model = model;
+        this.available = true;
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+}
+
+class RentalCarSystem {
+    private List<Car> cars;
+
+    public RentalCarSystem() {
+        cars = new ArrayList<>();
+    }
+
+    public void addCar(Car car) {
+        cars.add(car);
+    }
+
+    public void rentCar(String make, String model) {
+        for (Car car : cars) {
+            if (car.getMake().equals(make) && car.getModel().equals(model) && car.isAvailable()) {
+                car.setAvailable(false);
+                System.out.println("Car rented: " + make + " " + model);
+                return;
+            }
+        }
+        System.out.println("Car not available for rental: " + make + " " + model);
+    }
+
+    public void returnCar(String make, String model) {
+        for (Car car : cars) {
+            if (car.getMake().equals(make) && car.getModel().equals(model) && !car.isAvailable()) {
+                car.setAvailable(true);
+                System.out.println("Car returned: " + make + " " + model);
+                return;
+            }
+        }
+        System.out.println("Car not found or already returned: " + make + " " + model);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        RentalCarSystem rentalCarSystem = new RentalCarSystem();
+
+        // Adding cars to the system
+        rentalCarSystem.addCar(new Car("Toyota", "Camry"));
+        rentalCarSystem.addCar(new Car("Honda", "Civic"));
+        rentalCarSystem.addCar(new Car("Ford", "Mustang"));
+
+        // Renting a car
+        rentalCarSystem.rentCar("Toyota", "Camry");
+        rentalCarSystem.rentCar("Honda", "Civic");
+
+        // Trying to rent an already rented car
+        rentalCarSystem.rentCar("Toyota", "Camry");
+
+        // Returning a car
+        rentalCarSystem.returnCar("Toyota", "Camry");
+
+        // Renting the returned car
+        rentalCarSystem.rentCar("Toyota", "Camry");
+    }
+}
